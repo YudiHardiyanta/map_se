@@ -107,6 +107,24 @@ import axios from 'axios'
 
 const selectedLayer = ref('osm')
 
+interface SelectItem {
+    title: string
+    value: string
+}
+
+interface Point {
+    id: string
+    codeIdentity: string
+    nama: string
+    no_bangunan: string
+    kodeWilayah: string
+    lat: number
+    long: number
+}
+
+
+
+
 const kabupatenItems = [
     { title: '01 - Jembrana', value: 5101 },
     { title: '02 - Tabanan', value: 5102 },
@@ -119,10 +137,10 @@ const kabupatenItems = [
     { title: '71 - Denpasar', value: 5171 },
 ]
 
-const kecamatanItems = ref([])
-const desaItems = ref([])
-const slsItems = ref([])
-const subslsItems = ref([])
+const kecamatanItems = ref<SelectItem[]>([])
+const desaItems = ref<SelectItem[]>([])
+const slsItems = ref<SelectItem[]>([])
+const subslsItems = ref<SelectItem[]>([])
 
 const selectedKabupaten = ref<string | null>(null)
 const selectedKecamatan = ref<string | null>(null)
@@ -153,7 +171,7 @@ const geoJsonStyle = () => ({
     fillOpacity: 0.4
 })
 
-const points = ref([])
+const points = ref<Point[]>([])
 
 const change_map = async (value: string) => {
     let map = null;
