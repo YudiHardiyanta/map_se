@@ -72,7 +72,6 @@
 
                                     <v-card-text>
                                         <div><strong>ID</strong> : {{ item.id }}</div>
-                                        <div><strong>Code Identity</strong> : {{ item.codeIdentity }}</div>
                                         <div><strong>No Bangunan</strong> : {{ item.no_bangunan }}</div>
                                         <div><strong>Kode Wilayah</strong> : {{ item.kodeWilayah }}</div>
                                         <div><strong>Latitude</strong> : {{ item.lat }}</div>
@@ -114,7 +113,6 @@ interface SelectItem {
 
 interface Point {
     id: string
-    codeIdentity: string
     nama: string
     no_bangunan: string
     kodeWilayah: string
