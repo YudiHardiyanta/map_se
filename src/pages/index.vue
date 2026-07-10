@@ -53,7 +53,7 @@
 
                 </v-card-text>
 
-
+                
                 <div style="height: 600px;">
                     <l-map v-model:zoom="zoom" :center="center" style="height:100%; width:100%;">
                         <!-- OpenStreetMap -->
@@ -84,6 +84,15 @@
                         <l-geo-json :geojson="geoJsonData" :options-style="geoJsonStyle" />
 
                     </l-map>
+                </div>
+
+                <v-card-text>
+                    <v-row>
+                        <span>Tabel Data</span>
+                    </v-row>
+                </v-card-text>
+                <div style="height: 600px;">
+                    <v-data-table :headers="headers" :items="points" item-value="id" class="elevation-1" />
                 </div>
             </v-card-text>
         </v-card>
@@ -121,6 +130,14 @@ interface Point {
 }
 
 
+const headers = [
+  { title: 'Id', key: 'id' },
+  { title: 'Nama', key: 'nama' },
+  { title: 'No Bangunan', key: 'no_bangunan' },
+  { title: 'Kode Wilayah', key: 'kodeWilayah' },
+  { title: 'Latitude', key: 'lat' },
+  { title: 'Longitude', key: 'long' },
+]
 
 
 const kabupatenItems = [
