@@ -21,30 +21,30 @@
                     <v-row>
                         <v-col>
                             <v-select label="Kabupaten/Kota" v-model="selectedKabupaten" :items="kabupatenItems"
-                                item-title="title" item-value="value" variant="outlined"
+                                item-title="title" item-value="value" variant="outlined" clearable
                                 @update:model-value="kab_on_change">
                             </v-select>
                         </v-col>
                         <v-col>
                             <v-select label="Kecamatan" v-model="selectedKecamatan" :items="kecamatanItems"
-                                item-title="title" item-value="value" variant="outlined"
+                                item-title="title" item-value="value" variant="outlined" clearable
                                 @update:model-value="kec_on_change">
                             </v-select>
                         </v-col>
                         <v-col>
                             <v-select label="Desa/Kelurahan" v-model="selectedDesa" :items="desaItems"
-                                item-title="title" item-value="value" variant="outlined"
+                                item-title="title" item-value="value" variant="outlined" clearable
                                 @update:model-value="desa_on_change">
                             </v-select>
                         </v-col>
                         <v-col>
                             <v-select label="SLS" v-model="selectedSLS" :items="slsItems" item-title="title"
-                                item-value="value" variant="outlined" @update:model-value="sls_on_change">
+                                item-value="value" variant="outlined" @update:model-value="sls_on_change" clearable>
                             </v-select>
                         </v-col>
                         <v-col>
                             <v-select label="SUBSLS" v-model="selectedSUBSLS" :items="subslsItems" item-title="title"
-                                item-value="value" variant="outlined" @update:model-value="subsls_on_change">
+                                item-value="value" variant="outlined" @update:model-value="subsls_on_change" clearable>
                             </v-select>
                         </v-col>
                     </v-row>
