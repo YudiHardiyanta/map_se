@@ -177,7 +177,7 @@ const change_map = async (value: string) => {
     let map = null;
     if (value.length == 14) {
         map = await axios.get(
-            `api/maps/sls_2025_01/${value}`,
+            `https://tools.statsbali.id/selok/maps/sls_2025_01/${value}`,
             {
                 headers: {
                     Authorization: 'Bearer ipds_ganteng_sekali123!'
@@ -189,7 +189,7 @@ const change_map = async (value: string) => {
     }
     if (value.length == 16) {
         map = await axios.get(
-            `api/maps/subsls_2025_01/${value}`,
+            `https://tools.statsbali.id/selok/maps/subsls_2025_01/${value}`,
             {
                 headers: {
                     Authorization: 'Bearer ipds_ganteng_sekali123!'
@@ -201,7 +201,7 @@ const change_map = async (value: string) => {
     }
 
     const titik = await axios.get(
-        `api/locations/${value}`,
+        `https://tools.statsbali.id/selok/locations/${value}`,
         {
             headers: {
                 Authorization: 'Bearer ipds_ganteng_sekali123!'
@@ -231,7 +231,7 @@ const kab_on_change = async (value: string) => {
 
     try {
         const response = await axios.get(
-            `api/regions/3/${value}`,
+            `https://tools.statsbali.id/selok/regions/3/${value}`,
             {
                 headers: {
                     Authorization: 'Bearer ipds_ganteng_sekali123!'
@@ -261,7 +261,7 @@ const kec_on_change = async (value: string) => {
 
     try {
         const response = await axios.get(
-            `api/regions/4/${value}`,
+            `https://tools.statsbali.id/selok/regions/4/${value}`,
             {
                 headers: {
                     Authorization: 'Bearer ipds_ganteng_sekali123!'
@@ -288,7 +288,7 @@ const desa_on_change = async (value: string) => {
 
     try {
         const response = await axios.get(
-            `api/regions/5/${value}`,
+            `https://tools.statsbali.id/selok/regions/5/${value}`,
             {
                 headers: {
                     Authorization: 'Bearer ipds_ganteng_sekali123!'
@@ -313,7 +313,7 @@ const sls_on_change = async (value: string) => {
 
     try {
         const response = await axios.get(
-            `api/regions/6/${value}`,
+            `https://tools.statsbali.id/selok/regions/6/${value}`,
             {
                 headers: {
                     Authorization: 'Bearer ipds_ganteng_sekali123!'
