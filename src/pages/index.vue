@@ -53,35 +53,44 @@
 
                 </v-card-text>
 
-                
-                <div style="height: 600px;">
+
+                <div style="height: 600px; position:relative;">
                     <l-map v-model:zoom="zoom" :center="center" style="height:100%; width:100%;">
                         <!-- OpenStreetMap -->
 
                         <l-tile-layer :url="tileUrl" />
+                        <div :key="markerKey">
+                            <l-circle-marker v-for="item in points" :key="item.id" :lat-lng="[item.lat, item.long]"
+                                :radius="6" color="red" fillColor="red" :fillOpacity="0.8">
+                                <l-popup>
+                                    <v-card width="320">
+                                        <v-card-title>
+                                            {{ item.nama }}
+                                        </v-card-title>
 
-                        <l-circle-marker v-for="item in points" :key="item.id" :lat-lng="[item.lat, item.long]"
-                            :radius="6" color="red" fillColor="red" :fillOpacity="0.8">
-                            <l-popup>
-                                <v-card width="320">
-                                    <v-card-title>
-                                        {{ item.nama }}
-                                    </v-card-title>
+                                        <v-divider />
 
-                                    <v-divider />
+                                        <v-card-text>
+                                            <div><strong>ID</strong> : {{ item.id }}</div>
+                                            <div><strong>No Bangunan</strong> : {{ item.no_bangunan }}</div>
+                                            <div><strong>Kode Wilayah</strong> : {{ item.kodeWilayah }}</div>
+                                            <div><strong>Latitude</strong> : {{ item.lat }}</div>
+                                            <div><strong>Longitude</strong> : {{ item.long }}</div>
+                                        </v-card-text>
+                                    </v-card>
+                                </l-popup>
+                            </l-circle-marker>
+                        </div>
 
-                                    <v-card-text>
-                                        <div><strong>ID</strong> : {{ item.id }}</div>
-                                        <div><strong>No Bangunan</strong> : {{ item.no_bangunan }}</div>
-                                        <div><strong>Kode Wilayah</strong> : {{ item.kodeWilayah }}</div>
-                                        <div><strong>Latitude</strong> : {{ item.lat }}</div>
-                                        <div><strong>Longitude</strong> : {{ item.long }}</div>
-                                    </v-card-text>
-                                </v-card>
-                            </l-popup>
-                        </l-circle-marker>
 
                         <l-geo-json :geojson="geoJsonData" :options-style="geoJsonStyle" />
+
+                        <!-- Loading -->
+                        <v-overlay :model-value="loadingMap" contained persistent class="align-center justify-center">
+
+                            <v-progress-circular indeterminate size="64" color="primary" />
+
+                        </v-overlay>
 
                     </l-map>
                 </div>
@@ -115,6 +124,8 @@ import axios from 'axios'
 
 const selectedLayer = ref('osm')
 
+const markerKey = ref(0)
+
 interface SelectItem {
     title: string
     value: string
@@ -129,14 +140,14 @@ interface Point {
     long: number
 }
 
-
+const loadingMap = ref(false)
 const headers = [
-  { title: 'Id', key: 'id' },
-  { title: 'Nama', key: 'nama' },
-  { title: 'No Bangunan', key: 'no_bangunan' },
-  { title: 'Kode Wilayah', key: 'kodeWilayah' },
-  { title: 'Latitude', key: 'lat' },
-  { title: 'Longitude', key: 'long' },
+    { title: 'Id', key: 'id' },
+    { title: 'Nama', key: 'nama' },
+    { title: 'No Bangunan', key: 'no_bangunan' },
+    { title: 'Kode Wilayah', key: 'kodeWilayah' },
+    { title: 'Latitude', key: 'lat' },
+    { title: 'Longitude', key: 'long' },
 ]
 
 
@@ -189,46 +200,52 @@ const geoJsonStyle = () => ({
 const points = ref<Point[]>([])
 
 const change_map = async (value: string) => {
-    let map = null;
-    if (value.length == 14) {
-        map = await axios.get(
-            `https://tools.statsbali.id/selok/maps/sls_2025_01/${value}`,
-            {
-                headers: {
-                    Authorization: 'Bearer ipds_ganteng_sekali123!'
+    loadingMap.value = true
+    try {
+        let map = null;
+        if (value.length == 14) {
+            map = await axios.get(
+                `https://tools.statsbali.id/selok/maps/sls_2025_01/${value}`,
+                {
+                    headers: {
+                        Authorization: 'Bearer ipds_ganteng_sekali123!'
+                    }
                 }
-            }
-        )
-        center.value = [map.data.features[0].properties.centroid_y, map.data.features[0].properties.centroid_x]
-        geoJsonData.value = map.data
-    }
-    if (value.length == 16) {
-        map = await axios.get(
-            `https://tools.statsbali.id/selok/maps/subsls_2025_01/${value}`,
-            {
-                headers: {
-                    Authorization: 'Bearer ipds_ganteng_sekali123!'
-                }
-            }
-        )
-        center.value = [map.data.features[0].properties.centroid_y, map.data.features[0].properties.centroid_x]
-        geoJsonData.value = map.data
-    }
-
-    const titik = await axios.get(
-        `https://tools.statsbali.id/selok/locations/${value}`,
-        {
-            headers: {
-                Authorization: 'Bearer ipds_ganteng_sekali123!'
-            }
+            )
+            center.value = [map.data.features[0].properties.centroid_y, map.data.features[0].properties.centroid_x]
+            geoJsonData.value = map.data
         }
-    )
+        if (value.length == 16) {
+            map = await axios.get(
+                `https://tools.statsbali.id/selok/maps/subsls_2025_01/${value}`,
+                {
+                    headers: {
+                        Authorization: 'Bearer ipds_ganteng_sekali123!'
+                    }
+                }
+            )
+            center.value = [map.data.features[0].properties.centroid_y, map.data.features[0].properties.centroid_x]
+            geoJsonData.value = map.data
+        }
 
-    points.value = titik.data
-    zoom.value = 20
-    //console.log('Map data:', map.data.features[0].geometry.coordinates[0][0])
+        const titik = await axios.get(
+            `https://tools.statsbali.id/selok/locations/${value}`,
+            {
+                headers: {
+                    Authorization: 'Bearer ipds_ganteng_sekali123!'
+                }
+            }
+        )
 
-
+        points.value = titik.data
+        markerKey.value++
+        zoom.value = 20
+        //console.log('Map data:', map.data.features[0].geometry.coordinates[0][0])
+    } catch (error) {
+        console.error('Error fetching map data:', error)
+    } finally {
+        loadingMap.value = false
+    }
 }
 
 const kab_on_change = async (value: string) => {
